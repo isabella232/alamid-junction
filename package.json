@@ -1,0 +1,37 @@
+{
+  "name": "alamid-junction",
+  "version": "0.1.0",
+  "description": "Provides convenient methods for setting and retrieving multiple signals",
+  "main": "./lib/Junction.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha -R spec"
+  },
+  "keywords": [
+    "signal",
+    "observable",
+    "reactive",
+    "eventemitter",
+    "event",
+    "js-signals",
+    "signals",
+    "pub/sub",
+    "publish",
+    "subscribe",
+    "observer",
+    "promise",
+    "notify"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "1.x",
+    "chai": "1.x",
+    "sinon-chai": "2.x",
+    "alamid-signal": "0.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peerigon/alamid-signal.git"
+  },
+  "author": "peerigon <developers@peerigon.com>",
+  "license": "MIT"
+}
