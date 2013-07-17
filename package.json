@@ -35,16 +35,7 @@
   "testling": {
     "harness" : "mocha",
     "files": "test/*.js",
-    "browsers": {
-      "iexplore": [6, 7, 8, 9, 10],
-      "chrome": [15, 20, 25, "canary"],
-      "firefox": [15, 20, 22, "nightly"],
-      "safari": [5, 6],
-      "opera": [10, 11, 12, "next"],
-      "iphone": [6],
-      "ipad": [6],
-      "android-browser": [4.2]
-    }
+"browsers": [ "ie8", "ie9", "ff/13", "chrome/20" ]
   },
   "author": "peerigon <developers@peerigon.com>",
   "license": "MIT"
