@@ -113,10 +113,10 @@ describe("Junction", function () {
 
     });
 
-    describe(".provide(key)", function () {
+    describe(".signal(key)", function () {
 
         it("should return a signal", function () {
-            var instance = junction.provide("greeting");
+            var instance = junction.signal("greeting");
 
             expect(instance).to.be.an("function");
             expect(instance.constructor).to.equal(Signal);
@@ -125,12 +125,12 @@ describe("Junction", function () {
         it("should return the same signal instance multiple times", function () {
             var instance;
 
-            instance = junction.provide("greeting");
-            expect(junction.provide("greeting")).to.equal(instance);
+            instance = junction.signal("greeting");
+            expect(junction.signal("greeting")).to.equal(instance);
         });
 
         it("should return a signal representing the value specified by key", function () {
-            var greeting = junction.provide("greeting");
+            var greeting = junction.signal("greeting");
 
             expect(greeting()).to.equal(undefined);
             junction.set("greeting", "Ahoy!");
@@ -140,7 +140,7 @@ describe("Junction", function () {
 
     });
 
-    describe(".provide(key) with alamid-signal", function () {
+    describe(".signal(key) with alamid-signal", function () {
 
         before(function () {
             Junction.prototype.Signal = AlamidSignal;
@@ -153,12 +153,12 @@ describe("Junction", function () {
         it("should return the same signal instance multiple times", function () {
             var instance;
 
-            instance = junction.provide("greeting");
-            expect(junction.provide("greeting")).to.equal(instance);
+            instance = junction.signal("greeting");
+            expect(junction.signal("greeting")).to.equal(instance);
         });
 
         it("should return a signal representing the value specified by key", function () {
-            var greeting = junction.provide("greeting");
+            var greeting = junction.signal("greeting");
 
             expect(greeting()).to.equal(undefined);
             junction.set("greeting", "Ahoy!");
