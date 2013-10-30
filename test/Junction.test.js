@@ -174,18 +174,27 @@ describe("Junction", function () {
         });
 
         describe(".dispose()", function () {
+            var name,
+                greeting;
 
-            it("should call dispose() on all signals that have been created by the junction", function () {
-                var name = junction.signal("name"),
-                    greeting = junction.signal("greeting");
-
+            beforeEach(function () {
+                name = junction.signal("name");
+                greeting = junction.signal("greeting");
                 name.dispose = sinon.spy();
                 greeting.dispose = sinon.spy();
+                junction.set("age", 99);
+            });
 
+            it("should call dispose() on all signals that have been created by the junction", function () {
                 junction.dispose();
 
                 expect(name.dispose).to.have.been.called;
                 expect(greeting.dispose).to.have.been.called;
+            });
+
+            it("should remove the internal signals reference", function () {
+                junction.dispose();
+                expect(junction._signals).to.equal(null);
             });
 
         });
