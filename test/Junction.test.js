@@ -182,55 +182,7 @@ describe("Junction", function () {
 
         });
 
-        describe(".reset()", function () {
-
-            beforeEach(function () {
-                junction.set("greeting", "Ahoy!");
-                junction.set("age", 34);
-            });
-
-            it("should set all keys to the given value", function () {
-                junction.reset();
-
-                expect(junction.get()).to.eql({
-                    greeting: undefined,
-                    age: undefined
-                });
-            });
-
-            it("should call the internal setter function", function () {
-                junction.setter = sinon.spy();
-
-                junction.reset();
-
-                expect(junction.setter).to.have.been.called;
-            });
-
-            it("should be chainable", function () {
-                expect(junction.reset()).to.equal(junction);
-            });
-
-        });
-
-        describe(".reset(value)", function () {
-
-            beforeEach(function () {
-                junction.set("greeting", "Ahoy!");
-                junction.set("age", 34);
-            });
-
-            it("should set all keys to the given value", function () {
-                junction.reset(true);
-
-                expect(junction.get()).to.eql({
-                    greeting: true,
-                    age: true
-                });
-            });
-
-        });
-
-        describe(".unset(key)", function () {
+        describe(".remove(key)", function () {
 
             beforeEach(function () {
                 junction.set("greeting", "Ahoy!");
@@ -238,7 +190,7 @@ describe("Junction", function () {
             });
 
             it("should remove the key from the junction", function () {
-                junction.unset("greeting");
+                junction.remove("greeting");
 
                 expect(junction.get()).to.eql({
                     age: 34
@@ -249,12 +201,12 @@ describe("Junction", function () {
                 var signal = junction.signal("greeting");
 
                 expect(signal()).to.equal("Ahoy!");
-                junction.unset("greeting");
+                junction.remove("greeting");
                 expect(signal()).to.equal(undefined);
             });
 
             it("should be chainable", function () {
-                expect(junction.unset("greeting")).to.equal(junction);
+                expect(junction.remove("greeting")).to.equal(junction);
             });
         });
 
