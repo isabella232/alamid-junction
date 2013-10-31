@@ -44,6 +44,19 @@ describe("Junction", function () {
             delete Junction.prototype.Signal;
         });
 
+        describe(".isDisposed", function () {
+
+            it("should be false by default", function () {
+                expect(junction.isDisposed).to.equal(false);
+            });
+
+            it("should be true after junction.dispose() has been called", function () {
+                junction.dispose();
+                expect(junction.isDisposed).to.equal(true);
+            });
+
+        });
+
         describe(".get() before data has been set", function () {
 
             it("should return an empty object", function () {
