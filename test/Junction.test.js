@@ -232,6 +232,12 @@ describe("Junction", function () {
                 expect(greeting()).to.equal(undefined);
             });
 
+            it("should throw no error if the key is unknown", function () {
+                expect(function () {
+                    junction.remove("some unknown key");
+                }).to.not.throw;
+            });
+
             it("should be chainable", function () {
                 expect(junction.remove("greeting")).to.equal(junction);
             });
