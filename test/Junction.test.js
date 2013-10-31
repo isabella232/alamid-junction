@@ -182,6 +182,50 @@ describe("Junction", function () {
 
         });
 
+        describe(".reset()", function () {
+
+            beforeEach(function () {
+                junction.set("greeting", "Ahoy!");
+                junction.set("age", 34);
+            });
+
+            it("should set all keys to the given value", function () {
+                junction.reset();
+
+                expect(junction.get()).to.eql({
+                    greeting: undefined,
+                    age: undefined
+                });
+            });
+
+            it("should call the internal setter function", function () {
+                junction.setter = sinon.spy();
+
+                junction.reset();
+
+                expect(junction.setter).to.have.been.called;
+            });
+
+        });
+
+        describe(".reset(value)", function () {
+
+            beforeEach(function () {
+                junction.set("greeting", "Ahoy!");
+                junction.set("age", 34);
+            });
+
+            it("should set all keys to the given value", function () {
+                junction.reset(true);
+
+                expect(junction.get()).to.eql({
+                    greeting: true,
+                    age: true
+                });
+            });
+
+        });
+
         describe(".signal(key)", function () {
 
             it("should return a signal", function () {
