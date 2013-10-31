@@ -11,12 +11,39 @@ chai.use(require("sinon-chai"));
 describe("Junction", function () {
     var junction;
 
-    beforeEach(function () {
-        junction = new Junction();
-    });
+    describe(".use(plugin, config?)", function () {
+        var plugin,
+            config;
 
-    it("should be an instance of Junction", function () {
-        expect(junction).to.be.an.instanceof(Junction);
+        beforeEach(function () {
+            plugin = sinon.spy();
+            config = {};
+        });
+
+        it("should provide a plugin-interface", function () {
+            Junction.use(plugin, config);
+            expect(plugin).to.have.been.calledWith(Junction, config);
+        });
+
+        it("should apply the same plugin only once", function () {
+            Junction.use(plugin, config);
+            Junction.use(plugin, config);
+            expect(plugin).to.have.been.calledOnce;
+        });
+
+        it("should be usable on other objects too", function () {
+            var otherObj = {
+                use: Junction.use
+            };
+
+            otherObj.use(plugin);
+            expect(plugin).to.have.been.calledWith(otherObj);
+        });
+
+        it("should be chainable", function () {
+            expect(Junction.use(function () {})).to.equal(Junction);
+        });
+
     });
 
     describe(".prototype", function () {
@@ -40,9 +67,33 @@ describe("Junction", function () {
             Junction.prototype.Signal = Signal;
         });
 
+        beforeEach(function () {
+            junction = new Junction();
+        });
+
         after(function () {
             delete Junction.prototype.Signal;
         });
+        
+        describe(".constructor()", function () {
+
+            it("should be an override-able function", function () {
+                var constructor = Junction.prototype.constructor;
+
+                expect(constructor).to.be.a("function");
+
+                Junction.prototype.constructor = sinon.spy();
+                junction = new Junction();
+                expect(Junction.prototype.constructor).to.have.been.called;
+
+                Junction.prototype.constructor = constructor;
+            });
+
+            it("should return an instance of Junction", function () {
+                expect(new Junction()).to.be.an.instanceof(Junction);
+            });
+
+        });        
 
         describe(".isDisposed", function () {
 
