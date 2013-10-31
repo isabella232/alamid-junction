@@ -206,6 +206,10 @@ describe("Junction", function () {
                 expect(junction.setter).to.have.been.called;
             });
 
+            it("should be chainable", function () {
+                expect(junction.reset()).to.equal(junction);
+            });
+
         });
 
         describe(".reset(value)", function () {
@@ -224,6 +228,34 @@ describe("Junction", function () {
                 });
             });
 
+        });
+
+        describe(".unset(key)", function () {
+
+            beforeEach(function () {
+                junction.set("greeting", "Ahoy!");
+                junction.set("age", 34);
+            });
+
+            it("should remove the key from the junction", function () {
+                junction.unset("greeting");
+
+                expect(junction.get()).to.eql({
+                    age: 34
+                });
+            });
+
+            it("should set the key's signal to undefined", function () {
+                var signal = junction.signal("greeting");
+
+                expect(signal()).to.equal("Ahoy!");
+                junction.unset("greeting");
+                expect(signal()).to.equal(undefined);
+            });
+
+            it("should be chainable", function () {
+                expect(junction.unset("greeting")).to.equal(junction);
+            });
         });
 
         describe(".signal(key)", function () {
@@ -303,6 +335,7 @@ describe("Junction", function () {
             it("should remove the internal signals reference", function () {
                 junction.dispose();
                 expect(junction._signals).to.equal(null);
+                expect(junction._values).to.equal(null);
             });
 
         });
