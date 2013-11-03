@@ -1,6 +1,6 @@
 {
   "name": "alamid-junction",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Provides convenient methods for setting and retrieving multiple signals",
   "main": "./lib/Junction.js",
   "scripts": {
