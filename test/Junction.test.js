@@ -25,12 +25,6 @@ describe("Junction", function () {
             expect(plugin).to.have.been.calledWith(Junction, config);
         });
 
-        it("should apply the same plugin only once", function () {
-            Junction.use(plugin, config);
-            Junction.use(plugin, config);
-            expect(plugin).to.have.been.calledOnce;
-        });
-
         it("should be usable on other objects too", function () {
             var otherObj = {
                 use: Junction.use
@@ -50,15 +44,21 @@ describe("Junction", function () {
         var givenValue;
 
         function Signal() {
+            var listener;
+
             function signal(value) {
                 if (arguments.length === 1) {
                     givenValue = value;
+                    listener && listener(value);
                     return signal;
                 } else {
                     return givenValue;
                 }
             }
             signal.constructor = Signal;
+            signal.subscribe = function (newListener) {
+                listener = newListener;
+            };
 
             return signal;
         }
@@ -182,6 +182,24 @@ describe("Junction", function () {
 
         });
 
+        describe(".get(key) after data has been set", function () {
+
+            beforeEach(function () {
+                junction.set("greeting", "Ahoy!");
+                junction.set("age", 34);
+            });
+
+            it("should return the stored value", function () {
+                expect(junction.get("greeting")).to.equal("Ahoy!");
+                expect(junction.get("age")).to.equal(34);
+            });
+
+            it("should still return undefined for unset keys", function () {
+                expect(junction.get("victims")).to.equal(undefined);
+            });
+
+        });
+
         describe(".reset()", function () {
 
             beforeEach(function () {
@@ -274,6 +292,19 @@ describe("Junction", function () {
                     junction.signal("greeting");
                 }).to.throw("You need to configure a Signal-class");
                 Junction.prototype.Signal = Signal;
+            });
+
+            it("should update the junction's property when the signal changes", function () {
+                var greeting = junction.signal("greeting");
+
+                expect(junction.get()).to.eql({});
+
+                greeting("hello");
+
+                expect(junction.get("greeting")).to.equal("hello");
+                expect(junction.get()).to.eql({
+                    greeting: "hello"
+                });
             });
 
             describe("with alamid-signal", function () {
