@@ -6,6 +6,7 @@ var chai = require("chai"),
     AlamidSignal = require("alamid-signal"),
     expect = chai.expect;
 
+chai.Assertion.includeStack = true;
 chai.use(require("sinon-chai"));
 
 describe("Junction", function () {
@@ -200,6 +201,43 @@ describe("Junction", function () {
 
         });
 
+        describe(".setter", function () {
+
+            beforeEach(function () {
+                junction.setter = sinon.stub().returns("it works");
+            });
+
+            it("should be called when set(key, value) is called and take the returned value as new value", function () {
+                junction.setter = sinon.stub().returns("it works");
+
+                junction.set("hello", "pirate");
+
+                expect(junction.setter).to.have.been.calledOnce;
+                expect(junction.setter).to.have.been.calledWith("hello", "pirate");
+                expect(junction.get("hello")).to.equal("it works");
+            });
+
+            it("should be called for every key-value-pair and take the returned value as new value", function () {
+                junction.set({
+                    greeting: "Ahoy!",
+                    age: 34,
+                    attributes: {}
+                });
+
+                expect(junction.setter).to.have.been.calledThrice;
+                expect(junction.setter.firstCall).to.have.been.calledWith("greeting", "Ahoy!");
+                expect(junction.setter.secondCall).to.have.been.calledWith("age", 34);
+                expect(junction.setter.thirdCall).to.have.been.calledWith("attributes", {});
+
+                expect(junction.get()).to.eql({
+                    greeting: "it works",
+                    age: "it works",
+                    attributes: "it works"
+                });
+            });
+
+        });
+
         describe(".reset()", function () {
 
             beforeEach(function () {
@@ -235,6 +273,16 @@ describe("Junction", function () {
             });
 
             it("should remove the key from the junction", function () {
+                junction.remove("greeting");
+
+                expect(junction.get()).to.eql({
+                    age: 34
+                });
+            });
+
+            it("should not work different if a signal has previously been retrieved", function () {
+                junction.signal("greeting");
+
                 junction.remove("greeting");
 
                 expect(junction.get()).to.eql({
@@ -292,6 +340,17 @@ describe("Junction", function () {
                     junction.signal("greeting");
                 }).to.throw("You need to configure a Signal-class");
                 Junction.prototype.Signal = Signal;
+            });
+
+            it("should apply a setter to the signal which calls the Junction's setter", function () {
+                var greeting;
+
+                junction.setter = sinon.spy();
+                greeting = junction.signal("greeting");
+
+                greeting.setter("hello");
+
+                expect(junction.setter).to.have.been.calledWith("greeting", "hello");
             });
 
             it("should update the junction's property when the signal changes", function () {
