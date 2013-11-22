@@ -236,6 +236,13 @@ describe("Junction", function () {
                 });
             });
 
+            it("should only by called once when there is also a signal", function () {
+                junction.signal("name");
+                junction.set("name", "Mighty pirate");
+
+                expect(junction.setter).to.have.been.calledOnce;
+            });
+
         });
 
         describe(".reset()", function () {
