@@ -6,7 +6,7 @@ var chai = require("chai"),
     AlamidSignal = require("alamid-signal"),
     expect = chai.expect;
 
-chai.Assertion.includeStack = true;
+chai.config.includeStack = true;
 chai.use(require("sinon-chai"));
 
 describe("Junction", function () {
@@ -253,6 +253,9 @@ describe("Junction", function () {
             });
 
             it("should remove all keys from the junction", function () {
+                // creating a signal instance just to make sure that this has no side-effect on reset()
+                junction.signal("greeting");
+
                 junction.reset();
 
                 expect(junction.get()).to.eql({});
